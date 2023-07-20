@@ -1,6 +1,6 @@
 
 TARGET := libspdr-firmware.a
-SRCS := src/Flag.cpp src/Instruction.cpp src/Register.cpp src/Line.cpp src/InstructionSet.cpp src/Mode.cpp src/MicroSequence.cpp
+SRCS := src/Flag.cpp src/Instruction.cpp src/Register.cpp src/Line.cpp src/InstructionSet.cpp src/Mode.cpp src/MicroSequence.cpp src/instruction.cpp
 
 BUILD_DIR := build
 OBJECTS := $(SRCS:%=$(BUILD_DIR)/%.o)
