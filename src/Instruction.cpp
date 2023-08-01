@@ -122,11 +122,11 @@ Instruction::Instruction(std::string name, AddressingMode mode)
 
 Instruction::Instruction() : name{}, mode{} {}
 
-std::ostream& operator<<(std::ostream& stream, Instruction& instruction) {
-    std::cout << instruction.name;
+std::ostream& operator<<(std::ostream& stream, const Instruction& instruction) {
+    stream << instruction.name;
     if (instruction.mode.destination.mode != Mode::Implied)
-        std::cout << '\t';
-    return std::cout << instruction.mode;
+        stream << ' ';
+    return stream << instruction.mode;
 }
 
 bool operator<(const Instruction& ins0, const Instruction& ins1) {

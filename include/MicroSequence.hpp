@@ -6,12 +6,14 @@
 #include "Line.hpp"
 #include "Instruction.hpp"
 #include <cstdint>
+#include <optional>
 
 class MicroSequence {
 private:
 public:
     std::map<FlagSet, std::vector<Micro>> micros{};
     FlagSet conditionToAdd{};
+
     Instruction instruction;
 
     MicroSequence();

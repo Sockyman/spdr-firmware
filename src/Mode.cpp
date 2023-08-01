@@ -99,6 +99,12 @@ std::ostream& operator<<(std::ostream& stream, const AddressingMode& mode) {
     return stream;
 }
 
+bool operator==(const AddressingMode& mode0, const AddressingMode& mode1) {
+    return mode0.destination == mode1.destination
+        && mode0.source == mode1.source
+        && mode0.destination == mode1.destination;
+}
+
 bool operator<(const AddressingMode& mode0, const AddressingMode& mode1) {
     if (mode0.destination == mode1.destination)
         return mode0.source < mode1.source;

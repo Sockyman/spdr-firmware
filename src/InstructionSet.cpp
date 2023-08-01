@@ -3,11 +3,19 @@
 #include <iomanip>
 #include <stdexcept>
 
-MicroSequence& InstructionSet::instruction(std::string name, AddressingMode mode) {
+MicroSequence& InstructionSet::instruction(
+    std::string name,
+    AddressingMode mode
+) {
     MicroSequence& micros = this->interupt();
     Instruction ins{name, mode};
-    instructionReferences[ins] = this->instructions.size() - 1;
+
     micros.instruction = ins;
+
+    std::size_t opcode = this->instructions.size() - 1;
+    instructionReferences[ins] = opcode;
+    micros.opcode = opcode;
+
     return micros.addFetch();
 }
 
@@ -72,7 +80,13 @@ MicroSequence& InstructionSet::instructionPop(RID reg) {
         .addPopEnd(reg);
 }
 
-MicroSequence& InstructionSet::instructionAluBinaryDirect(std::string name, bool swapA, bool keepResult, Line aluLine, FlagSet carrySet) {
+MicroSequence& InstructionSet::instructionAluBinaryDirect(
+    std::string name,
+    bool swapA,
+    bool keepResult,
+    Line aluLine,
+    FlagSet carrySet
+) {
     return instruction(name, {{RID::A}, {Mode::Direct}})
         .condition(swapA)
             .add(RID::A, RID::Temp)

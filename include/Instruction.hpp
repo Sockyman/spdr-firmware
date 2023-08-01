@@ -35,7 +35,7 @@ public:
     Instruction();
 };
 
-std::ostream& operator<<(std::ostream& stream, Instruction& instruction);
+std::ostream& operator<<(std::ostream& stream, const Instruction& instruction);
 
 bool operator<(const Instruction& ins0, const Instruction& ins1);
 

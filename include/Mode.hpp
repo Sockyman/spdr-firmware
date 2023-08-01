@@ -38,6 +38,8 @@ public:
 
 std::ostream& operator<<(std::ostream& stream, const Address& address);
 
+bool modeEqual(const Mode& mode0, const Mode& mode1);
+
 bool operator<(const Address& address0, const Address& address1);
 bool operator==(const Address& address0, const Address& address1);
 
@@ -54,6 +56,7 @@ public:
 
 std::ostream& operator<<(std::ostream& stream, const AddressingMode& mode);
 
+bool operator==(const AddressingMode& mode0, const AddressingMode& mode1);
 bool operator<(const AddressingMode& mode0, const AddressingMode& mode1);
 
 #endif
