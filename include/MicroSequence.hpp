@@ -15,6 +15,7 @@ public:
     FlagSet conditionToAdd{};
 
     Instruction instruction;
+    std::size_t opcode;
 
     MicroSequence();
 
