@@ -137,7 +137,7 @@ InstructionSet::InstructionSet() {
         .add(RID::Alu, RID::Temp, {Line::passthrough, Line::flip})
         .add(RID::Temp, RID::Mem);
 
-    instruction("ror", {{RID::A}})
+    instruction("ror", {{Mode::Direct}})
         .addLoadDirect(RID::Temp)
         .add(RID::Alu, RID::Temp, {Line::lsh, Line::flip, Line::set_flags})
             .with(Flag::C, {{Line::carry}})
@@ -146,12 +146,12 @@ InstructionSet::InstructionSet() {
 
     instructionJump("jmp", true);
 
-    instruction("jmp", {{Mode::ImmediateAddress}})
+    instruction("jmp", {{RID::CD}})
         .add(RID::C, RID::PcL)
         .add(RID::D, RID::PcH);
 
     instructionJump("jz", Flag::Z);
-    instructionJump("jz", Flag::NZ);
+    instructionJump("jnz", Flag::NZ);
     instructionJump("jc", Flag::C);
     instructionJump("jnc", Flag::NC);
     instructionJump("jn", Flag::S);
@@ -198,6 +198,15 @@ InstructionSet::InstructionSet() {
     instruction("lcc", {{RID::A}})
         .add(RID::A, RID::Lcd);
 
+    instruction("prog", {})
+        .add(RID::Prog, RID::None)
+        .add(RID::Prog, RID::None)
+        .add(RID::Prog, RID::None)
+        .add(RID::Prog, RID::None)
+        .add(RID::Prog, RID::None)
+        .add(RID::Prog, RID::None)
+        .add(RID::Prog, RID::None)
+        .add(RID::Prog, RID::A);
 
     /*for (int i = 0; i < instructions.size(); ++i) {
         auto ins = instructions[i];
@@ -207,6 +216,5 @@ InstructionSet::InstructionSet() {
         //}
         std::cout << '\n';
     }*/
-
 }
 

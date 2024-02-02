@@ -14,14 +14,18 @@ enum class RID {
     Sp,
     PcL,
     PcH,
+    PcLH,
     MarL,
     MarH,
+    MarLH,
     Mem,
     Out,
     Lcd,
     Kbd,
     Ins,
     CD,
+    Prog,
+    None,
 };
 
 std::ostream& operator<<(std::ostream& stream, RID reg);

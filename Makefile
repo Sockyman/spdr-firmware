@@ -8,7 +8,7 @@ BUILD_DIR := build
 OBJECTS := $(SRCS:%=$(BUILD_DIR)/%.o)
 DEPS := $(OBJECTS:.o=.d)
 
-CXXFLAGS := -std=c++17 -g -Iinclude -c -MMD -MP -Wall -pedantic
+CXXFLAGS := -std=c++20 -g -Iinclude -c -MMD -MP -Wall -pedantic
 
 # $(BUILD_DIR)/testing: $(TARGET) src/main.cpp
 

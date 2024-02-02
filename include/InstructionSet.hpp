@@ -10,9 +10,17 @@
 #include <vector>
 #include <string>
 #include <cstdint>
+#include <optional>
+#include <span>
+#include <memory>
 
 class InstructionSet {
 private:
+    static std::unique_ptr<InstructionSet> singleInstance;
+
+    std::vector<MicroSequence> instructions{};
+    std::map<Instruction, std::size_t> instructionReferences{};
+
     MicroSequence& instruction(std::string name, AddressingMode mode);
     MicroSequence& interupt();
 
@@ -71,10 +79,12 @@ private:
     );
 
 public:
-    std::vector<MicroSequence> instructions{};
-    std::map<Instruction, std::size_t> instructionReferences{};
+    static const InstructionSet& instance();
 
-    MicroSequence* getInstruction(Instruction ins);
+    std::optional<const MicroSequence*> getInstruction(const Instruction& ins) const;
+    std::optional<std::size_t> getOpcode(const Instruction& ins) const;
+
+    std::span<const MicroSequence> getInstructions() const;
 
     InstructionSet();
 };

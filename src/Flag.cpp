@@ -1,6 +1,7 @@
 #include "Flag.hpp"
 #include <stdexcept>
 #include <string>
+#include <tuple>
 
 const std::map<Flag, Flag> flagPairs {
     {Flag::C, Flag::NC},
@@ -9,9 +10,16 @@ const std::map<Flag, Flag> flagPairs {
 };
 
 
-std::set<FlagSet> getCombinations(FlagSet start, std::map<Flag, Flag>::const_iterator it);
+std::set<FlagSet> getCombinations(
+    FlagSet start,
+    std::map<Flag, Flag>::const_iterator it
+);
 
-std::set<FlagSet> getCombinations(FlagSet start, std::map<Flag, Flag>::const_iterator it, Flag flag) {
+std::set<FlagSet> getCombinations(
+    FlagSet start,
+    std::map<Flag, Flag>::const_iterator it,
+    Flag flag
+) {
     start.flags.insert(flag);
     if (++it == flagPairs.cend()) {
         return {start};
@@ -19,7 +27,10 @@ std::set<FlagSet> getCombinations(FlagSet start, std::map<Flag, Flag>::const_ite
     return getCombinations(start, it);
 }
 
-std::set<FlagSet> getCombinations(FlagSet start, std::map<Flag, Flag>::const_iterator it) {
+std::set<FlagSet> getCombinations(
+    FlagSet start,
+    std::map<Flag, Flag>::const_iterator it
+) {
     auto s = getCombinations(start, it, it->second);
     s.merge(getCombinations(start, it, it->first));
     return s;
@@ -70,6 +81,20 @@ FlagSet::FlagSet() : flags{}, noMatchOnEmpty{false} {}
 FlagSet::FlagSet(Flag flag) : flags{flag}, noMatchOnEmpty{false} {}
 
 FlagSet::FlagSet(bool value) : flags{}, noMatchOnEmpty{!value} {
+}
+
+FlagSet::FlagSet(std::uint16_t value) : flags{}, noMatchOnEmpty{false} {
+    for (auto& flag : {
+        std::pair{0b100, Flag::Z},
+        std::pair{0b1000, Flag::C},
+        std::pair{0b10, Flag::S}
+    }) {
+        if (value & flag.first) {
+            this->flags.insert(flag.second);
+        } else {
+            this->flags.insert(invertFlag(flag.second));
+        }
+    }
 }
 
 FlagSet FlagSet::invert() {

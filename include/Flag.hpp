@@ -34,6 +34,7 @@ public:
     FlagSet();
     FlagSet(Flag flag);
     FlagSet(bool value);
+    FlagSet(std::uint16_t value);
 
     FlagSet invert();
     bool match(const FlagSet flags);

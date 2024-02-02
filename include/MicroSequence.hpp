@@ -10,9 +10,9 @@
 
 class MicroSequence {
 private:
+    FlagSet conditionToAdd{};
 public:
     std::map<FlagSet, std::vector<Micro>> micros{};
-    FlagSet conditionToAdd{};
 
     Instruction instruction;
     std::size_t opcode;

@@ -18,7 +18,11 @@ MicroSequence& MicroSequence::add(Micro micro) {
     return *this;
 }
 
-MicroSequence& MicroSequence::add(RID readFrom, RID writeTo, std::set<Line> lines) {
+MicroSequence& MicroSequence::add(
+        RID readFrom,
+        RID writeTo,
+        std::set<Line> lines
+) {
     return this->add(Micro{readFrom, writeTo, lines});
 }
 
