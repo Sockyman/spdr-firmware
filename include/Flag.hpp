@@ -32,9 +32,10 @@ public:
     bool noMatchOnEmpty;
 
     FlagSet();
+    FlagSet(std::set<Flag> flags, bool noMatchOnEmpty);
     FlagSet(Flag flag);
-    FlagSet(bool value);
-    FlagSet(std::uint16_t value);
+    explicit FlagSet(bool value);
+    //FlagSet(std::uint16_t value);
 
     FlagSet invert();
     bool match(const FlagSet flags);
@@ -44,6 +45,8 @@ public:
     FlagSet operator|(const Flag flag);
     FlagSet operator|(const FlagSet flags);
 
+    static FlagSet always();
+    static FlagSet never();
 };
 
 std::uint32_t asBitFlags(const FlagSet flags);

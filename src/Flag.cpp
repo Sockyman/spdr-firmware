@@ -76,14 +76,26 @@ FlagSet FlagSet::set() {
     return flags;
 }
 
-FlagSet::FlagSet() : flags{}, noMatchOnEmpty{false} {}
+FlagSet::FlagSet() : FlagSet{{}, false} {}
 
-FlagSet::FlagSet(Flag flag) : flags{flag}, noMatchOnEmpty{false} {}
+FlagSet::FlagSet(std::set<Flag> flags, bool noMatchOnEmpty)
+: flags{flags}, noMatchOnEmpty{noMatchOnEmpty} {
 
-FlagSet::FlagSet(bool value) : flags{}, noMatchOnEmpty{!value} {
 }
 
-FlagSet::FlagSet(std::uint16_t value) : flags{}, noMatchOnEmpty{false} {
+FlagSet::FlagSet(Flag flag) : FlagSet{{flag}, false} {}
+
+FlagSet::FlagSet(bool value) : FlagSet{{}, !value} {}
+
+FlagSet FlagSet::always() {
+    return FlagSet{true};
+}
+
+FlagSet FlagSet::never() {
+    return FlagSet{false};
+}
+
+/*FlagSet::FlagSet(std::uint16_t value) : flags{}, noMatchOnEmpty{false} {
     for (auto& flag : {
         std::pair{0b100, Flag::Z},
         std::pair{0b1000, Flag::C},
@@ -95,7 +107,7 @@ FlagSet::FlagSet(std::uint16_t value) : flags{}, noMatchOnEmpty{false} {
             this->flags.insert(invertFlag(flag.second));
         }
     }
-}
+}*/
 
 FlagSet FlagSet::invert() {
     FlagSet flags{};

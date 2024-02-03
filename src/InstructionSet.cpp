@@ -87,13 +87,13 @@ MicroSequence& InstructionSet::instructionPop(RID reg) {
 
 MicroSequence& InstructionSet::instructionAluBinaryDirect(
     std::string name,
-    bool swapA,
-    bool keepResult,
     Line aluLine,
-    FlagSet carrySet
+    FlagSet carrySet,
+    bool swapA,
+    bool keepResult
 ) {
     return instruction(name, {{RID::A}, {Mode::Direct}})
-        .condition(swapA)
+        .condition(FlagSet{swapA})
             .add(RID::A, RID::Temp)
             .add(RID::PcL, RID::MarL)
             .add(RID::PcH, RID::MarH)
@@ -109,20 +109,20 @@ MicroSequence& InstructionSet::instructionAluBinaryDirect(
         .add({aluLine, Line::set_flags})
             .with(
                 carrySet,
-                {{Line::carry}}).with(keepResult,
+                {{Line::carry}}).with(FlagSet{keepResult},
                 {RID::Alu, RID::A}
             );
 }
 
 MicroSequence& InstructionSet::instructionAluBinaryImm(
     std::string name,
-    bool swapA,
-    bool keepResult,
     Line aluLine,
-    FlagSet carrySet
+    FlagSet carrySet,
+    bool swapA,
+    bool keepResult
 ) {
     return instruction(name, {{RID::A}, {Mode::Immediate}})
-        .condition(swapA)
+        .condition(FlagSet{swapA})
             .add(RID::A, RID::Temp)
             .addLoadImm(RID::A)
         .elseCondition()
@@ -130,18 +130,18 @@ MicroSequence& InstructionSet::instructionAluBinaryImm(
         .endCondition()
         .add({aluLine, Line::set_flags})
             .with(carrySet, {{Line::carry}})
-            .with(keepResult, {RID::Alu, RID::A});
+            .with(FlagSet{keepResult}, {RID::Alu, RID::A});
 }
 
 void InstructionSet::instructionAluBinary(
     std::string name,
-    bool swapA,
-    bool keepResult,
     Line aluLine,
-    FlagSet carrySet
+    FlagSet carrySet,
+    bool swapA,
+    bool keepResult
 ) {
-    instructionAluBinaryDirect(name, swapA, keepResult, aluLine, carrySet);
-    instructionAluBinaryImm(name, swapA, keepResult, aluLine, carrySet);
+    instructionAluBinaryDirect(name, aluLine, carrySet, swapA, keepResult);
+    instructionAluBinaryImm(name, aluLine, carrySet, swapA, keepResult);
 }
 
 MicroSequence& InstructionSet::instructionAluUnary(

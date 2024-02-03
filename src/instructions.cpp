@@ -66,40 +66,40 @@ InstructionSet::InstructionSet() {
     instructionXchMem(RID::D);
 
 
-    instructionAluBinary("add", false, true, Line::add, false);
-    instructionAluBinary("addc", false, true, Line::add, Flag::C);
+    instructionAluBinary("add", Line::add);
+    instructionAluBinary("addc", Line::add, Flag::C);
 
-    instructionAluBinary("sub", true, true, Line::sub, true);
-    instructionAluBinary("subb", true, true, Line::sub, Flag::C);
+    instructionAluBinary("sub", Line::sub, FlagSet::always(), true);
+    instructionAluBinary("subb", Line::sub, Flag::C, true);
 
-    instructionAluBinaryDirect("cmp", true, false, Line::sub, true)
+    instructionAluBinaryDirect("cmp", Line::sub, FlagSet::always(), true, false)
         .add(RID::Temp, RID::A);
-    instructionAluBinaryImm("cmp", true, false, Line::sub, true)
-        .add(RID::Temp, RID::A);
-
-    instructionAluBinaryDirect("cmpb", true, false, Line::sub, Flag::C)
-        .add(RID::Temp, RID::A);
-    instructionAluBinaryImm("cmpb", true, false, Line::sub, Flag::C)
+    instructionAluBinaryImm("cmp", Line::sub, FlagSet::always(), true, false)
         .add(RID::Temp, RID::A);
 
-    instructionAluUnary("not", RID::A, Line::b_not, false);
+    instructionAluBinaryDirect("cmpb", Line::sub, Flag::C, true, false)
+        .add(RID::Temp, RID::A);
+    instructionAluBinaryImm("cmpb", Line::sub, Flag::C, true, false)
+        .add(RID::Temp, RID::A);
 
-    instructionAluBinary("and", false, true, Line::b_and, false);
-    instructionAluBinary("or", false, true, Line::b_or, false);
-    instructionAluBinary("xor", false, true, Line::b_xor, false);
-    instructionAluBinary("bit", false, false, Line::b_and, false);
+    instructionAluUnary("not", RID::A, Line::b_not);
 
-    instructionAluUnary("inc", RID::A, Line::inc, false);
-    instructionAluUnary("dec", RID::A, Line::dec, false);
-    instructionAluUnary("inc", RID::C, Line::inc, false);
-    instructionAluUnary("dec", RID::C, Line::dec, false);
-    instructionAluUnary("inc", RID::D, Line::inc, false);
-    instructionAluUnary("dec", RID::D, Line::dec, false);
+    instructionAluBinary("and", Line::b_and);
+    instructionAluBinary("or", Line::b_or);
+    instructionAluBinary("xor", Line::b_xor);
+    instructionAluBinary("bit", Line::b_and, FlagSet::never(), false, false);
 
-    instructionAluUnaryMem("inc", Line::inc, false);
-    instructionAluUnaryMem("dec", Line::dec, false);
-    instructionAluUnaryIndirect("inc", Line::inc, false);
-    instructionAluUnaryIndirect("dec", Line::dec, false);
+    instructionAluUnary("inc", RID::A, Line::inc);
+    instructionAluUnary("dec", RID::A, Line::dec);
+    instructionAluUnary("inc", RID::C, Line::inc);
+    instructionAluUnary("dec", RID::C, Line::dec);
+    instructionAluUnary("inc", RID::D, Line::inc);
+    instructionAluUnary("dec", RID::D, Line::dec);
+
+    instructionAluUnaryMem("inc", Line::inc);
+    instructionAluUnaryMem("dec", Line::dec);
+    instructionAluUnaryIndirect("inc", Line::inc);
+    instructionAluUnaryIndirect("dec", Line::dec);
 
     instructionAluUnary("incc", RID::A, Line::passthrough, Flag::C);
     instructionAluUnary("incc", RID::C, Line::passthrough, Flag::C);
@@ -114,7 +114,7 @@ InstructionSet::InstructionSet() {
     instructionAluUnaryIndirect("incc", Line::passthrough, Flag::C);
     instructionAluUnaryIndirect("decb", Line::dec, Flag::C);
 
-    instructionAluUnary("shl", RID::A, Line::lsh, false);
+    instructionAluUnary("shl", RID::A, Line::lsh);
     instructionAluUnary("rol", RID::A, Line::lsh, Flag::C);
 
     instruction("shr", {{RID::A}})
@@ -128,7 +128,7 @@ InstructionSet::InstructionSet() {
             .with(Flag::C, {{Line::carry}})
         .add(RID::Alu, RID::A, {Line::passthrough, Line::flip});
 
-    instructionAluUnaryMem("shl", Line::lsh, false);
+    instructionAluUnaryMem("shl", Line::lsh);
     instructionAluUnaryMem("rol", Line::lsh, Flag::C);
 
     instruction("shr", {{Mode::Direct}})
@@ -144,7 +144,7 @@ InstructionSet::InstructionSet() {
         .add(RID::Alu, RID::Temp, {Line::passthrough, Line::flip})
         .add(RID::Temp, RID::Mem);
 
-    instructionJump("jmp", true);
+    instructionJump("jmp", FlagSet::always());
 
     instruction("jmp", {{RID::CD}})
         .add(RID::C, RID::PcL)
@@ -176,7 +176,7 @@ InstructionSet::InstructionSet() {
         .addPopStart()
         .addPop(RID::PcH)
         .addPopEnd(RID::PcL)
-            .with(true, {{Line::counter_enable}})
+            .with(FlagSet::always(), {{Line::counter_enable}})
         .add({Line::counter_enable})
         .add({Line::counter_enable});
 
